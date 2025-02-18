@@ -13,6 +13,7 @@ def landing_view(request):
 def dashboard_view(request):
     return render(request, 'dashboard.html', {'user': request.user})
 
+# core/views.py (partial)
 def register_view(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
@@ -20,6 +21,8 @@ def register_view(request):
             user = form.save()
             login(request, user)
             return redirect('dashboard')
+        else:
+            messages.error(request, "Registration failed. Please correct the errors below.")
     else:
         form = RegisterForm()
     return render(request, 'register.html', {'form': form})
