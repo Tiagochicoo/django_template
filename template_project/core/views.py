@@ -1,7 +1,9 @@
 # core/views.py
 from django.shortcuts import render, redirect
-from django.contrib.auth import login, logout
+from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import LoginView
+from django.contrib import messages
 from .forms import RegisterForm
 
 def landing_view(request):
@@ -31,3 +33,10 @@ def custom_logout(request):
 
 def login_required_error(request):
     return render(request, 'login_required.html')
+
+class CustomLoginView(LoginView):
+    template_name = 'login.html'
+
+    def form_invalid(self, form):
+        messages.error(self.request, "Invalid username or password. Please try again.")
+        return super().form_invalid(form)
